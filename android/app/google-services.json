@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "346730783451",
+    "project_id": "mahdi-notes-app",
+    "storage_bucket": "mahdi-notes-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346730783451:android:969a3f980bf87aef7d22fe",
+        "android_client_info": {
+          "package_name": "com.almalikofficial.notes_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE35xPpfI6JTJOMz_U-aslY1n0GQrVh80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
