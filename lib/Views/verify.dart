@@ -8,6 +8,7 @@ class VerifyEmailView extends StatefulWidget {
   State<VerifyEmailView> createState() => _VerifyEmailViewState();
 }
 
+
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   bool _sending = false;
 
