@@ -5,6 +5,7 @@ import 'package:notes_app/Views/login_view.dart';
 import 'package:notes_app/Views/notes_view.dart';
 import 'package:notes_app/Views/register_view.dart';
 import 'package:notes_app/Views/verify.dart';
+import 'package:notes_app/constance/route.dart';
 import 'package:notes_app/firebase_options.dart';
 
 Future<void> main() async {
@@ -17,16 +18,13 @@ Future<void> main() async {
       ),
       home: const Homepage(),
       routes: {
-        "/login/": (context) => const LoginView(),
-        "/register/": (context) => const RegisterView(),
-        '/notes/': (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
       },
     ),
   );
 }
-
-
-
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -57,4 +55,3 @@ class Homepage extends StatelessWidget {
     );
   }
 }
-
