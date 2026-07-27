@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtool show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -29,16 +30,16 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
+      appBar: AppBar(title: Text("Login")),
       body: Column(
         children: [
           TextField(
             controller: _email,
             enableSuggestions: false,
             autocorrect: false,
-            decoration: const InputDecoration(hintText: "Enter your email here"),
+            decoration: const InputDecoration(
+              hintText: "Enter your email here",
+            ),
             keyboardType: TextInputType.emailAddress,
           ),
           TextField(
@@ -56,27 +57,30 @@ class _LoginViewState extends State<LoginView> {
               final password = _password.text;
               try {
                 final userCredential = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(email: email, password: password);
-                print(email);
-                print(password);
-                print(userCredential);
+                    .signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                Navigator.of(context,).pushNamedAndRemoveUntil(
+                  '/notes/',
+                 (_) => false,
+                 );
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-credential') {
-                  print("Incorrect email or password");
+                  devtool.log("Incorrect email or password");
                 } else {
-                  print("An error occurred: ${e.message}");
-                  print(e.code);
+                  devtool.log("An error occurred: ${e.message}");
+                  devtool.log(e.code);
                 }
               }
             },
             child: Text("Login"),
           ),
           TextButton(
-            onPressed: (){
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                "/register/",
-                (route) => false,
-              );
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil("/register/", (route) => false);
             },
             child: Text("have no account? Register here!"),
           ),

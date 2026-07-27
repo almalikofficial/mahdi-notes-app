@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer' as devtools show log;
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -34,7 +35,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                         }
                       } on FirebaseAuthException catch (e) {
                         // ignore: avoid_print
-                        print(e.code);
+                        devtools.log(e.code);
                       } finally {
                         if (mounted) setState(() => _sending = false);
                       }
