@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:notes_app/constance/route.dart';
+
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
 
   @override
   State<VerifyEmailView> createState() => _VerifyEmailViewState();
 }
-
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   bool _sending = false;
@@ -21,8 +22,10 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Please verify your email'),
-            const SizedBox(height: 12),
+            const Text(
+              'We\'ve sent you an email verification.\nPlease open it to verify your account.\nIf you haven\'t received a verification email yet, press the button below',
+            ),
+            const SizedBox(height: 100),
             _sending
                 ? const CircularProgressIndicator()
                 : TextButton(
@@ -42,6 +45,15 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                     },
                     child: const Text('Send email verification'),
                   ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(registerRoute, (_) => false);
+              },
+              child: Text('Resart'),
+            ),
           ],
         ),
       ),
