@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_app/Utilities/show_error_dialog.dart' show showErrorDialog;
+import 'package:notes_app/Utilities/show_error_dialog.dart'
+    show showErrorDialog;
 
 import 'package:notes_app/constance/route.dart';
 
@@ -62,9 +63,16 @@ class _LoginViewState extends State<LoginView> {
                   email: email,
                   password: password,
                 );
-                Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(notesRoute, (_) => false);
+                final user = FirebaseAuth.instance.currentUser;
+                if (user?.emailVerified ?? false) {
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil(notesRoute, (_) => false);
+                } else {
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil(verifyEmailRoute, (_) => false);
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'invalid-credential') {
                   await showErrorDialog(context, 'Incorrect email or password');
@@ -90,4 +98,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-
