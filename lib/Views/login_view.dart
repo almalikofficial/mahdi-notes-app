@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notes_app/services/auth/auth_exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/Utilities/show_error_dialog.dart'
     show showErrorDialog;
 
 import 'package:notes_app/constance/route.dart';
+import 'package:notes_app/services/auth/auth_service.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -59,12 +60,12 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text.trim();
               final password = _password.text;
               try {
-                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                await AuthService.firebase().logIn(
                   email: email,
                   password: password,
                 );
-                final user = FirebaseAuth.instance.currentUser;
-                if (user?.emailVerified ?? false) {
+                final user = AuthService.firebase().currentUser;
+                if (user?.isEmailVerified ?? false) {
                   Navigator.of(
                     context,
                   ).pushNamedAndRemoveUntil(notesRoute, (_) => false);
@@ -73,14 +74,10 @@ class _LoginViewState extends State<LoginView> {
                     context,
                   ).pushNamedAndRemoveUntil(verifyEmailRoute, (_) => false);
                 }
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'invalid-credential') {
-                  await showErrorDialog(context, 'Incorrect email or password');
-                } else {
-                  await showErrorDialog(context, 'Error:${e.code}');
-                }
-              } catch (e) {
-                await showErrorDialog(context, e.toString());
+              } on InvalidCredentialsAuthException {
+                await showErrorDialog(context, 'Incorrect email or password');
+              } on GenericAuthException {
+                await showErrorDialog(context, 'Authentication error');
               }
             },
             child: Text("Login"),
