@@ -10,7 +10,7 @@ class VerifyEmailView extends StatefulWidget {
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
-  bool _sending = false;
+  final bool _sending = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             TextButton(
               onPressed: () async {
                 await AuthService.firebase().logOut();
+                if (!context.mounted) return;
                 Navigator.of(
                   context,
                 ).pushNamedAndRemoveUntil(registerRoute, (_) => false);
