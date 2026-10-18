@@ -10,13 +10,18 @@ class NotesService {
   Database? _db;
 
   List<DatabaseNote> _notes = [];
-
-  NotesService._sharedInstance();
   static final NotesService _shared = NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _noteStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _noteStreamController.sink.add(_notes);
+      },
+    );
+  }
+
   factory NotesService() => _shared;
 
-  final _noteStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _noteStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _noteStreamController.stream;
 
@@ -104,7 +109,11 @@ class NotesService {
   Future<void> deleteNote({required int id}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
-    final deleteCount = await db.delete(noteTable, where: 'id=?', whereArgs: [id]);
+    final deleteCount = await db.delete(
+      noteTable,
+      where: 'id=?',
+      whereArgs: [id],
+    );
     if (deleteCount == 0) {
       throw ClouldNotDeleteNote();
     } else {

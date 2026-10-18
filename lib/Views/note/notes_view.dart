@@ -33,7 +33,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Notes"),
-        actions: [ 
+        actions: [
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(newNoteRoute);
@@ -76,7 +76,25 @@ class _NotesViewState extends State<NotesView> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text('waiting for all notes ...');
+                      if (snapshot.hasData) {
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        return ListView.builder(
+                          itemCount: allNotes.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final note = allNotes[index];
+                            return ListTile(
+                              title: Text(
+                                note.text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
                     default:
                       return const CircularProgressIndicator();
                   }
