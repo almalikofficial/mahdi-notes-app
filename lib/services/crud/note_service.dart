@@ -118,6 +118,7 @@ class NotesService {
       throw ClouldNotDeleteNote();
     } else {
       _notes.removeWhere((note) => note.id == id);
+      _noteStreamController.add(_notes);
     }
   }
 
