@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/Views/login_view.dart';
-import 'package:notes_app/Views/note/new_note_view.dart';
+import 'package:notes_app/Views/note/create_update_note_view.dart';
 import 'package:notes_app/Views/note/notes_view.dart';
 import 'package:notes_app/Views/register_view.dart';
 import 'package:notes_app/Views/verify.dart';
@@ -10,7 +10,7 @@ import 'package:notes_app/services/auth/auth_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MaterialApp( 
+    MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -21,7 +21,7 @@ Future<void> main() async {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        newNoteRoute: (context) => const NewNoteView(),
+        createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
     ),
   );
