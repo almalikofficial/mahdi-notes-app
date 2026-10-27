@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart' show immutable;
+import 'package:notes_app/extensions/list/filter.dart';
 import 'package:notes_app/services/crud/crud_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart'
@@ -8,6 +9,7 @@ import 'package:path/path.dart' show join;
 
 class NotesService {
   Database? _db;
+  DatabaseUser? _user;
 
   List<DatabaseNote> _notes = [];
   static final NotesService _shared = NotesService._sharedInstance();
@@ -23,14 +25,31 @@ class NotesService {
 
   late final StreamController<List<DatabaseNote>> _noteStreamController;
 
-  Stream<List<DatabaseNote>> get allNotes => _noteStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes =>
+      _noteStreamController.stream.filter((note) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return note.userId == currentUser.id;
+        } else {
+          throw UserSouldBeSetBeforReadingAllNotes();
+        }
+      });
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCerrentUser = true,
+  }) async {
     try {
       final user = await getUser(email: email);
+      if (setAsCerrentUser) {
+        _user = user;
+      }
       return user;
     } on CouldNotFindUser {
       final createdUser = await createUser(email: email);
+      if (setAsCerrentUser) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (e) {
       rethrow;
@@ -75,6 +94,7 @@ class NotesService {
   Future<Iterable<DatabaseNote>> getAllNote() async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
+
     final notes = await db.query(noteTable);
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
