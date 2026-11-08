@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 // هذا الكلاس مجرد يرجع حالة توثيق البريد الالكتروني للمستخدم الحالي في التطبيق
 @immutable
 class AuthUser {
-  final String? email;
+  final String id;
+  final String email;
   final bool isEmailVerified;
-  const AuthUser({required this.isEmailVerified, required this.email});
+  const AuthUser({
+    required this.isEmailVerified,
+    required this.email,
+    required this.id,
+  });
 
-  factory AuthUser.fromFirebase(User user) =>
-      AuthUser(email: user.email, isEmailVerified: user.emailVerified);
+  factory AuthUser.fromFirebase(User user) => AuthUser(
+    id: user.uid,
+    email: user.email!,
+    isEmailVerified: user.emailVerified,
+  );
 }
