@@ -7,7 +7,7 @@ import 'package:notes_app/services/auth/auth_service.dart';
 import 'package:notes_app/services/cloud/firebase_cloud_storage.dart';
 
 class NotesView extends StatefulWidget {
-  const NotesView({super.key}); 
+  const NotesView({super.key});
 
   @override
   State<NotesView> createState() => _NotesViewState();
